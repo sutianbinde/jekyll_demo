@@ -1,0 +1,133 @@
+---
+layout: default
+title: 评分效果
+---
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            font-size: 14px;
+        }
+        .footer{
+            height: 45px;
+            border-top: 1px solid #b5b5b5;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        .start-wrap{
+            margin: 13px 0 0 30%;
+        }
+        .start-wrap > *{
+            float: left;
+        }
+        .start-content{
+            margin: 0 10px;
+            position: relative;
+        }
+        .start-content span{
+            float: left;
+            width: 19px;
+            height: 19px;
+            background: url("img/big-stars.png") -38px 0 no-repeat;
+            cursor: pointer;
+        }
+        .start-text{
+            color: #888888;
+        }
+        .select-tips{
+            padding: 7px 10px 9px 4px;
+            border: 1px solid #c5c5c5;
+            position: absolute;
+            top: -44px;
+            left: 41px;
+            width: 80px;
+            height: 35px;
+            box-sizing: border-box;
+            z-index: 5;
+            background: #fff;
+            display: none;
+        }
+        .select-tips:after{
+            content: "";
+            position: absolute;
+            left: 21px;
+            top: 33px;
+            width: 10px;
+            height: 6px;
+            background: url("img/tips-arrow.png");
+        }
+    </style>
+　　<h2>{{ page.title }}</h2>
+　　<div class="footer">
+    <div class="start-wrap">
+        <span>评价文档:</span>
+        <div class="start-content">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <p class="select-tips">评价成功!</p>
+        </div>
+        <span class="start-text">力荐</span>
+    </div>
+</div>
+<script>
+    var oContent = document.getElementsByClassName("start-content")[0];
+    var aStart = oContent.getElementsByTagName("span");
+    var text = document.getElementsByClassName("start-text")[0];
+    var selectTips = document.getElementsByClassName("select-tips")[0];
+    var textArr = ["很差", "较差", "还行", "推荐", "力荐"];
+    var selected = false;
+    var selectIndex = -1;
+
+    for(var i=0; i<aStart.length; i++){
+        aStart[i].index = i;
+        //鼠标移入星星变化
+        aStart[i].onmouseover = function(){
+            selected = false;
+            var index = this.index;
+            for(var j=0; j<aStart.length; j++){
+                if(j<=index){
+                    aStart[j].style.backgroundPosition = "-1px 0";
+                }else{
+                    aStart[j].style.backgroundPosition = "-38px 0";
+                }
+            }
+
+            text.innerHTML = textArr[index];
+            text.style.display = "block";
+        };
+
+        aStart[i].onclick = function(){
+            selected = true;
+            selectIndex = this.index;
+
+            //评价成功显示
+            selectTips.style.left = selectIndex*19 - 17 + "px";
+            selectTips.style.display = "block";
+            setTimeout(function(){
+                selectTips.style.display = "none";
+            },800)
+        };
+
+        oContent.onmouseout = function(){
+            if(!selected){ //如果没有点击评分，那么就取消原来的选中
+                for(var j=0; j<aStart.length; j++){
+                    if(j>selectIndex){
+                        aStart[j].style.backgroundPosition = "-38px 0";
+                    }else{
+                        aStart[j].style.backgroundPosition = "-1px 0";
+                    }
+                }
+            }
+
+            text.style.display = "none";
+        }
+
+    }
+</script>
